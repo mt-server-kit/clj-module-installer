@@ -19,8 +19,9 @@
 
 (defn reg-installer!
   ; @description
-  ; Registers a module installer package that will be applied when the 'check-installation!'
-  ; function next called.
+  ; Registers a module installer function that will be applied when the
+  ; 'check-installation!' function next called and only if it doesn't successfully
+  ; installed yet.
   ;
   ; The :installer-f function's return value will be passed to the :test-f function,
   ; and the :test-f function's return value will be evaluted as a boolean.
@@ -56,39 +57,6 @@
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
-(defn install-edn-file!
-  ; @description
-  ; Creates and EDN file onto the given filepath (only if it does not exist),
-  ; and when creating, writes the body and/or the header into the created file.
-  ;
-  ; @param (string) filepath
-  ; @param (*) body
-  ; @param (string)(opt) header
-  ;
-  ; @usage
-  ; (install-edn-file! "my-file.edn" {...})
-  ;
-  ; @usage
-  ; (install-edn-file! "my-file.edn" {...} "My header\n...")
-  ;
-  ; @usage
-  ; (install-edn-file! "my-file.edn" nil "My header\n...")
-  ;
-  ; @return (boolean)
-  ([filepath body]
-   (if-not (io/file-exists?    filepath)
-           (io/write-edn-file! filepath body {:create? true})
-           (return :edn-file-already-exists)))
-
-  ([filepath body header]
-   (if-not (io/file-exists?           filepath)
-           (and (io/write-edn-file!   filepath body   {:create? true})
-                (io/write-edn-header! filepath header {:create? true}))
-           (return :edn-file-already-exists))))
-
-;; ----------------------------------------------------------------------------
-;; ----------------------------------------------------------------------------
-
 (defn- installation-error-catched
   ; @ignore
   ;
@@ -112,12 +80,12 @@
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
-(defn print-installation-state!
+(defn- print-installation-state!
   ; @usage
   ; (print-installation-state!)
   []
-  (let [first-package-installed-at (get-first-package-installed-at)
-        installed-package-count    (get-installed-package-count)
+  (let [first-package-installed-at (env/get-first-package-installed-at)
+        installed-package-count    (env/get-installed-package-count)
         first-package-installed-at (time/timestamp-string->date-time first-package-installed-at)]
        (println "module-installer installed" installed-package-count "packages since" first-package-installed-at)))
 
@@ -129,8 +97,8 @@
   ;
   ; @param (keyword) package-id
   [package-id]
-  ; Applying the installer functions, evaluting its result as boolean and storing the result,
-  ; in the installation log file
+  ; Applying the installer function, evaluting its result as boolean and storing
+  ; the result, in the installation log file
   (try (let [result ((-> @state/INSTALLERS package-id :installer-f))
              output ((-> @state/INSTALLERS package-id :test-f) result)]
             (when   result (println "module-installer installed:" package-id)
@@ -147,7 +115,7 @@
   []
   ; ...
   (println "module-installer installing packages ...")
-  ; Initializing the install-handler (creating the installation log file and adding it to .gitignore)
+  ; Initializing the install handler (creating the installation log file and adding it to .gitignore)
   (reset! state/INSTALLATION-STATE {:installed-package-count 0})
   (io/create-file! config/INSTALLED-PACKAGES-FILEPATH)
   (git/ignore!     config/INSTALLED-PACKAGES-FILEPATH  {:group "module-installer"})
@@ -165,7 +133,7 @@
                             (println "module-installer installing:" package-id "...")
                             (install-package! package-id)))]
               ; Iterating over the registered installer functions ...
-              (let [installation-order (-> @state/INSTALLERS map/get-keys (vector/order-items-by :priority))]
+              (let [installation-order (-> @state/INSTALLERS map/get-keys (vector/sort-items-by :priority))]
                    (doseq [package-id installation-order]
                           (f package-id)))
               ; ...

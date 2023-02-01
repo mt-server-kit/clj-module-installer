@@ -27,22 +27,22 @@ You can track the changes of the <strong>clj-module-installer</strong> library [
 
 ### Index
 
-- [How register a package installer?](#how-to-register-a-package-installer)
-
-- [How install an EDN file?](#how-to-install-an-edn-file)
+- [How to register a package installer?](#how-to-register-a-package-installer)
 
 - [How to run the registered installers?](#how-to-run-the-registered-installers)
 
+- [What does it look like in practice?](#what-does-it-look-like-in-practice)
+
 # Usage
 
-### How register a package installer?
+### How to register a package installer?
 
 The [`module-installer.api/reg-installer!`](documentation/clj/module-installer/API.md#reg-installer)
 function registers a function that will be applied when the `check-installation!`
-function will be called.
+function called.
 
 ```
-(defn my-installer-f [] (println "Installing a module ..."))
+(defn my-installer-f [] (println "Installing module ..."))
 (reg-installer! ::my-installer {:installer-f my-installer-f})
 ```
 
@@ -58,25 +58,6 @@ The `:installer-f` function's return value will be passed to the `:test-f` funct
 and the `:test-f` function's return value will be evaluted as a boolean.
 If false the installation will be qualified as an installation failure,
 and the package will be reinstalled when the 'check-installation!' next called.
-
-### How to install an EDN file?
-
-The [`module-installer.api/install-edn-file!`](documentation/clj/module-installer/API.md#install-edn-file)
-function creates and EDN file onto the given filepath (only if it does not exist),
-and when creating, writes the body and/or the header into the created file.
-In case of the file exists it doesn't change it anymore.
-
-```
-(install-edn-file! "my-file.edn" {:my-item "My value"})
-```
-
-```
-(install-edn-file! "my-file.edn" {:my-item "My value"} "My header\n...")
-```
-
-```
-(install-edn-file! "my-file.edn" nil "My header\n...")
-```
 
 ### How to run the registered installers?
 
@@ -124,7 +105,7 @@ for the second module.
 ```
 
 In the server boot loader we place the `check-installation!` function to run
-the installers before the server starts.
+the registered installers before the server starts.
 Maybe the best time to call is when the server already connected to its database,
 and the installers can reach the db.
 

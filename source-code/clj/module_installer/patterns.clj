@@ -7,7 +7,7 @@
 ; @ignore
 ;
 ; @constant (map)
-; https://github.com/bithandshake/pattern-api
+; https://github.com/bithandshake/cljc-validator
 (def PACKAGE-PROPS-PATTERN
      {:installer-f {:f*   fn?
                     :e*   ":installer-f must be a function!"}

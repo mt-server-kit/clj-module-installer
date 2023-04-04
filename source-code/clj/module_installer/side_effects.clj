@@ -1,6 +1,6 @@
 
 (ns module-installer.side-effects
-    (:require [git.api                     :as git]
+    (:require [git-handler.api             :as git-handler]
               [io.api                      :as io]
               [logger.api                  :as logger]
               [map.api                     :as map]
@@ -10,8 +10,8 @@
               [module-installer.prototypes :as prototypes]
               [module-installer.state      :as state]
               [noop.api                    :refer [return]]
-              [pattern.api                 :as p]
               [time.api                    :as time]
+              [validator.api               :as v]
               [vector.api                  :as vector]))
 
 ;; ----------------------------------------------------------------------------
@@ -49,8 +49,8 @@
   ; (defn my-package-f [] ...)
   ; (reg-installer! :my-package {:installer-f my-package-f})
   [package-id {:keys [preinstaller?] :as package-props}]
-  (and (p/valid? package-id    {:test* {:f* keyword? :e* "package-id must be a keyword!"}})
-       (p/valid? package-props {:pattern* patterns/PACKAGE-PROPS-PATTERN :prefix* "package-props"})
+  (and (v/valid? package-id    {:test* {:f* keyword? :e* "package-id must be a keyword!"}})
+       (v/valid? package-props {:pattern* patterns/PACKAGE-PROPS-PATTERN :prefix* "package-props"})
        (let [package-props (prototypes/package-props-prototype package-props)]
             (swap! state/INSTALLERS assoc package-id package-props))))
 
@@ -116,10 +116,10 @@
   ; ...
   (println "module-installer installing packages ...")
   ; Initializing the install handler (creating the installation log file and adding it to .gitignore)
-  (reset! state/INSTALLATION-STATE {:installed-package-count 0})
-  (io/create-file! config/INSTALLED-PACKAGES-FILEPATH)
-  (git/ignore!     config/INSTALLED-PACKAGES-FILEPATH  {:group "module-installer"})
-  (git/ignore!     config/INSTALLATION-ERRORS-FILEPATH {:group "module-installer"})
+  (reset!              state/INSTALLATION-STATE {:installed-package-count 0})
+  (io/create-file!     config/INSTALLED-PACKAGES-FILEPATH)
+  (git-handler/ignore! config/INSTALLED-PACKAGES-FILEPATH  {:group "module-installer"})
+  (git-handler/ignore! config/INSTALLATION-ERRORS-FILEPATH {:group "module-installer"})
   ; Reading the installation log file.
   (let [installed-packages (io/read-edn-file config/INSTALLED-PACKAGES-FILEPATH {:warn? false})]
        (letfn [(f [package-id]

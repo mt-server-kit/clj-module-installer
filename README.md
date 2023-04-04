@@ -42,7 +42,7 @@ function registers a function that will be applied when the `check-installation!
 function called.
 
 ```
-(defn my-installer-f [] (println "Installing module ..."))
+(defn my-installer-f [] (println "Installing ..."))
 (reg-installer! ::my-installer {:installer-f my-installer-f})
 ```
 
@@ -50,20 +50,20 @@ By specifying the `:priority` property, you can control the installation order.
 As higher is the `:priority` value, the installer function will be applied as sooner.
 
 ```
-(defn my-installer-f [] (println "Installing a module ..."))
+(defn my-installer-f [] (println "Installing ..."))
 (reg-installer! ::my-installer {:installer-f my-installer-f :priority 1})
 ```
 
 The `:installer-f` function's return value will be passed to the `:test-f` function,
-and the `:test-f` function's return value will be evaluted as a boolean.
+and the `:test-f` function's return value will be evaluated as a boolean.
 If false the installation will be qualified as an installation failure,
-and the package will be reinstalled when the 'check-installation!' next called.
+and the package will be reinstalled when the 'check-installation!' function next called.
 
 ### How to run the registered installers?
 
 The [`module-installer.api/check-installation!`](documentation/clj/module-installer/API.md#check-installation)
 function checks whether all the registered installers are successfully installed.
-If not, it runs the registered but not (successfully) installed functions, then quits
+If not, it runs the registered but not (successfully) installed functions, then exits
 the server.
 
 ```
@@ -72,12 +72,12 @@ the server.
 
 ### What does it look like in practice?
 
-In the following example there will be two independent namespaces with their
+In the following example there are two independent namespaces with their
 own installer functions and a boot loader which calls the `check-installer!`
 function.
 
-In the first namespace we register an installer function for creating necessary
-things before the module get used.
+In the first namespace we register an installer function in order to do some
+necessary stuff before the module get used.
 
 ```
 (ns my-namespace-a
@@ -90,8 +90,7 @@ things before the module get used.
 (module-installer/reg-installer! ::my-installer {:installer-f my-installer-f})  
 ```
 
-In the second namespace we register one another installer for preparing things
-for the second module.
+In the second namespace we register one another installer.
 
 ```
 (ns my-namespace-b
@@ -106,8 +105,16 @@ for the second module.
 
 In the server boot loader we place the `check-installation!` function to run
 the registered installers before the server starts.
-Maybe the best time to call is when the server already connected to its database,
-and the installers can reach the db.
+
+> Maybe the best time to call the `check-installation!` function is when the
+  server already connected to its database, and the installers can reach the db.
+
+When we first call the `run-server!` function it connects to the database,
+calls the `check-installation!` function which calls the previously registered
+installer functions then it exits the server.
+When we next call the `run-server!` function it connects to the database,
+calls the `check-installation!` function which does nothing because the installer
+functions are already called and then the HTTP server starts.
 
 ```
 (ns my-boot-loader

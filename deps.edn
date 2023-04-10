@@ -1,15 +1,15 @@
 
 {:paths ["source-code/clj"]
  :deps  {bithandshake/clj-git-handler {:git/url "https://github.com/bithandshake/clj-git-handler"
-                                       :sha     "07a7399c990857fff69e275c3a1680db4fa12833"}
+                                       :sha     "71db436f0e1cb1ec16c4524d94fbb8f5c8f453c8"}
          bithandshake/clj-logger      {:git/url "https://github.com/bithandshake/clj-logger"
-                                       :sha     "07a7399c990857fff69e275c3a1680db4fa12833"}
+                                       :sha     "71db436f0e1cb1ec16c4524d94fbb8f5c8f453c8"}
          bithandshake/cljc-fruits     {:git/url "https://github.com/bithandshake/cljc-fruits"
-                                       :sha     "07a7399c990857fff69e275c3a1680db4fa12833"}
+                                       :sha     "71db436f0e1cb1ec16c4524d94fbb8f5c8f453c8"}
          bithandshake/cljc-io         {:git/url "https://github.com/bithandshake/cljc-io"}
-                                      :sha     "5f985836ca8581fc13f3a5a56f585f491331a697"
+                                      :sha     "4379848c34a2a037289f35cfb1263fc9bdbe296b"
          bithandshake/cljc-time       {:git/url "https://github.com/bithandshake/cljc-time"
-                                       :sha     "c99eeb42aa8e9effd63b8281a788300fab1a6b1b"}
+                                       :sha     "aa1d6531de2cc992440c707ab4e176ed902d72cb"}
          bithandshake/cljc-validator  {:git/url "https://github.com/bithandshake/cljc-validator"
-                                       :sha     "07a7399c990857fff69e275c3a1680db4fa12833"}}}
+                                       :sha     "71db436f0e1cb1ec16c4524d94fbb8f5c8f453c8"}}}
  

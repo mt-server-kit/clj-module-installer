@@ -25,6 +25,8 @@ The <strong>clj-module-installer</strong> functional documentation is [available
 
 You can track the changes of the <strong>clj-module-installer</strong> library [here](CHANGES.md).
 
+# Usage
+
 ### Index
 
 - [How to register a package installer?](#how-to-register-a-package-installer)
@@ -32,8 +34,6 @@ You can track the changes of the <strong>clj-module-installer</strong> library [
 - [How to run the registered installers?](#how-to-run-the-registered-installers)
 
 - [What does it look like in practice?](#what-does-it-look-like-in-practice)
-
-# Usage
 
 ### How to register a package installer?
 

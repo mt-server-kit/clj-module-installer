@@ -33,7 +33,7 @@ You can track the changes of the <strong>clj-module-installer</strong> library [
 
 - [How to run the registered installers?](#how-to-run-the-registered-installers)
 
-- [What does it look like in practice?](#what-does-it-look-like-in-practice)
+- [Examples](#examples)
 
 ### How to register a package installer?
 
@@ -70,7 +70,7 @@ the server.
 (check-installation!)
 ```
 
-### What does it look like in practice?
+### Examples
 
 In the following example there are two independent namespaces with their
 own installer functions and a boot loader which calls the `check-installer!`
@@ -106,8 +106,8 @@ In the second namespace we register one another installer.
 In the server boot loader we place the `check-installation!` function to run
 the registered installers before the server starts.
 
-> Maybe the best time to call the `check-installation!` function is when the
-  server already connected to its database, and the installers can reach the db.
+> It might be the best time to call the `check-installation!` function is when the
+  server already connected to the database and the installers can reach the db.
 
 When we first call the `run-server!` function it connects to the database,
 calls the `check-installation!` function which calls the previously registered

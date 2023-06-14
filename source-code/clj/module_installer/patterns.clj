@@ -6,8 +6,10 @@
 
 ; @ignore
 ;
-; @constant (map)
+; @description
 ; https://github.com/bithandshake/cljc-validator
+;
+; @constant (map)
 (def PACKAGE-PROPS-PATTERN
      {:installer-f {:f*   fn?
                     :e*   ":installer-f must be a function!"}

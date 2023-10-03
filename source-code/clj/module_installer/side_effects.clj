@@ -2,7 +2,7 @@
 (ns module-installer.side-effects
     (:require [git-handler.api             :as git-handler]
               [io.api                      :as io]
-              [logger.api                  :as logger]
+              [edn-log.api                 :as edn-log]
               [map.api                     :as map]
               [module-installer.config     :as config]
               [module-installer.env        :as env]
@@ -70,7 +70,7 @@
   ; @usage
   ; (installation-error-catched :my-package "Something went wrong ...")
   [package-id error-message]
-  (logger/write! config/INSTALLATION-ERRORS-FILEPATH (str "\n" package-id "\n" error-message "\n"))
+  (edn-log/write! config/INSTALLATION-ERRORS-FILEPATH (str "\n" package-id "\n" error-message "\n"))
   ; ***
   (println "module-installer error catched in package installer:" package-id)
   (println error-message)

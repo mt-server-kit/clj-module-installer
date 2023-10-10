@@ -56,7 +56,7 @@ As higher is the `:priority` value, the installer function will be applied as so
 
 The `:installer-f` function's return value will be passed to the `:test-f` function,
 and the `:test-f` function's return value will be evaluated as a boolean.
-If false the installation will be qualified as an installation failure,
+If false the installation will be declared as an installation failure,
 and the package will be reinstalled when the 'check-installation!' function next called.
 
 ### How to run the registered installers?

@@ -5,15 +5,15 @@
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
-(defn package-props-prototype
+(defn installer-props-prototype
   ; @ignore
   ;
-  ; @param (map) package-props
+  ; @param (map) installer-props
   ;
   ; @return (map)
   ; {:priority (integer)
   ;  :test-f (function)}
-  [package-props]
+  [installer-props]
   (merge {:priority 0
           :test-f boolean}
-         (param package-props)))
+         (param installer-props)))

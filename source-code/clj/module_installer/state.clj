@@ -6,8 +6,10 @@
 
 ; @ignore
 ;
-; @atom (map)
-(def INSTALLERS (atom {}))
+; @atom (vectors in vector)
+; [[(keyword) installer-id
+;   (map) installer-props]]
+(def INSTALLERS (atom []))
 
 ; @ignore
 ;

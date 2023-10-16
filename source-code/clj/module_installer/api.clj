@@ -7,7 +7,7 @@
 ;; ----------------------------------------------------------------------------
 
 ; module-installer.side-effects
-(def package-installed?    env/package-installed?)
+(def installer-applied?    env/installer-applied?)
 (def require-installation? env/require-installation?)
 
 ; module-installer.side-effects

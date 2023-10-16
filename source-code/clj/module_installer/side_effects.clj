@@ -3,7 +3,6 @@
     (:require [git-handler.api             :as git-handler]
               [io.api                      :as io]
               [edn-log.api                 :as edn-log]
-              [map.api                     :as map]
               [module-installer.config     :as config]
               [module-installer.env        :as env]
               [module-installer.patterns   :as patterns]
@@ -19,23 +18,23 @@
 
 (defn reg-installer!
   ; @description
-  ; Registers a module installer function that will be applied when the
-  ; 'check-installation!' function next called and only if it doesn't successfully
-  ; installed yet.
+  ; Registers an installer function that will be applied when the 'check-installation!'
+  ; function next called and only if it hasn't successfully installed yet.
   ;
-  ; The :installer-f function's return value will be passed to the :test-f function,
-  ; and the :test-f function's return value will be evaluted as a boolean.
-  ; If false the installation will be declared as an installation failure,
-  ; and the package will be reinstalled when the 'check-installation!' next called.
+  ; When the 'check-installation!' function applies the registered installers, ...
+  ; 1. ... it applies the ':installer-f' function ...
+  ; 2. ... it applies the ':test-f' function with the ':installer-f' function's return value
+  ;        as its only argument ...
+  ; 3. ... it evaluates the ':test-f' function's return value as boolean ...
+  ; 4. ... if TRUE, it declares the installation as successful, otherwise it
+  ;        will try to apply the installer again when the 'check-installation!' function
+  ;        next called.
   ;
-  ; If you don't pass the :test-f function, the :installer-f function's return
-  ; value will be evaluted as a boolean.
+  ; You can control the installation order by passing the {:priority ...} property.
+  ; As higher is the priority value, the installer function will be applied as sooner.
   ;
-  ; By passing the {:priority ...} property, you can control the package installation
-  ; order. As higher is the priority value, the installer function will be applied as sooner.
-  ;
-  ; @param (keyword) package-id
-  ; @param (map) package-props
+  ; @param (keyword) installer-id
+  ; @param (map) installer-props
   ; {:installer-f (function)
   ;  :priority (integer)(opt)
   ;   Default: 0
@@ -43,112 +42,138 @@
   ;   Default: boolean}
   ;
   ; @usage
-  ; (reg-installer! :my-package {...})
+  ; (reg-installer! :my-installer {...})
   ;
   ; @usage
-  ; (defn my-package-f [] ...)
-  ; (reg-installer! :my-package {:installer-f my-package-f})
-  [package-id {:keys [preinstaller?] :as package-props}]
-  (and (v/valid? package-id    {:test* {:f* keyword? :e* "package-id must be a keyword!"}})
-       (v/valid? package-props {:pattern* patterns/PACKAGE-PROPS-PATTERN :prefix* "package-props"})
-       (let [package-props (prototypes/package-props-prototype package-props)]
-            (swap! state/INSTALLERS assoc package-id package-props))))
+  ; (defn my-installer-f [] ...)
+  ; (reg-installer! :my-installer {:installer-f my-installer-f})
+  [installer-id installer-props]
+  (and (v/valid? installer-id    {:test* {:f* keyword? :e* "installer-id must be a keyword!"}})
+       (v/valid? installer-props {:pattern* patterns/INSTALLER-PROPS-PATTERN :prefix* "installer-props"})
+       (let [installer-props (prototypes/installer-props-prototype installer-props)]
+            (swap! state/INSTALLERS vector/conj-item [installer-id installer-props]))))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
+
+(defn- installation-failed
+  ; @ignore
+  ;
+  ; @param (keyword) installer-id
+  ; @param (*) installer-f-output
+  ; @param (*) test-f-output
+  ;
+  ; @usage
+  ; (installation-error-catched :my-installation "...")
+  [installer-id installer-f-output test-f-output]
+  (edn-log/write! config/INSTALLATION-ERRORS-FILEPATH (str "\ninstaller-id: "       installer-id
+                                                           "\ninstaller-f output: " installer-f-output
+                                                           "\ntest-f output: "      test-f-output
+                                                           "\n"))
+  ; ***
+  (println "module-installer failed to apply installer:" installer-id)
+  (println "installer-f output:"                         installer-f-output)
+  (println "test-f output:"                              test-f-output)
+  (println "module-installer exiting ...")
+  (System/exit 0))
 
 (defn- installation-error-catched
   ; @ignore
   ;
-  ; @description
-  ; Prints the given error message to the console, writes the error-message
-  ; into the installation error log and exits the server.
-  ;
-  ; @param (keyword) package-id
+  ; @param (keyword) installer-id
   ; @param (*) error-message
   ;
   ; @usage
-  ; (installation-error-catched :my-package "Something went wrong ...")
-  [package-id error-message]
-  (edn-log/write! config/INSTALLATION-ERRORS-FILEPATH (str "\n" package-id "\n" error-message "\n"))
+  ; (installation-error-catched :my-installer "...")
+  [installer-id error-message]
+  (edn-log/write! config/INSTALLATION-ERRORS-FILEPATH (str "\ninstaller-id: "  installer-id
+                                                           "\nerror-message: " error-message
+                                                           "\n"))
   ; ***
-  (println "module-installer error catched in package installer:" package-id)
-  (println error-message)
-  (println "module-installer exiting server ...")
+  (println "module-installer catched an error while applying the installer:" installer-id)
+  (println "error-message:" error-message)
+  (println "module-installer exiting ...")
   (System/exit 0))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
 (defn- print-installation-state!
+  ; @ignore
+  ;
   ; @usage
   ; (print-installation-state!)
   []
-  (let [first-package-installed-at (env/get-first-package-installed-at)
-        installed-package-count    (env/get-installed-package-count)
-        first-package-installed-at (time/timestamp-string->date-time first-package-installed-at)]
-       (println "module-installer installed" installed-package-count "packages since" first-package-installed-at)))
+  (let [first-installer-applied-at (env/get-first-installer-applied-at)
+        applied-installer-count    (env/get-applied-installer-count)
+        first-installer-applied-at (time/timestamp-string->date-time first-installer-applied-at)]
+       (println "module-installer applied" applied-installer-count "installer(s) since" first-installer-applied-at)))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
-(defn- install-package!
+(defn- apply-installer!
   ; @ignore
   ;
-  ; @param (keyword) package-id
-  [package-id]
-  ; Applying the installer function, evaluting its result as boolean and storing
-  ; the result, in the installation log file
-  (try (let [result ((-> @state/INSTALLERS package-id :installer-f))
-             output ((-> @state/INSTALLERS package-id :test-f) result)]
-            (when   result (println "module-installer installed:" package-id)
-                           (swap! state/INSTALLATION-STATE update :installed-package-count inc))
-            (if-not result (installation-error-catched package-id result))
-            (io/swap-edn-file! config/INSTALLED-PACKAGES-FILEPATH assoc package-id
-                               {:result output :installed-at (time/timestamp-string)}))
-       (catch Exception e (installation-error-catched package-id e))))
+  ; @param (keyword) installer-id
+  ; @param (map) installer-props
+  [installer-id {:keys [installer-f test-f]}]
+  (try ; Applying the installer:
+       ; - applying the installer function
+       ; - applying the test function on the installer function's output
+       ; - evaluting the test function's output as boolean
+       (let [installer-f-output (installer-f)
+             test-f-output      (test-f  installer-f-output)
+             test-result        (boolean test-f-output)]
+            ; ...
+            (if-not test-result (installation-failed installer-id installer-f-output test-f-output))
+            ; ...
+            (when   test-result (println "module-installer applied installer:" installer-id)
+                                (swap! state/INSTALLATION-STATE update :applied-installer-count inc)
+                                (io/swap-edn-file! config/INSTALLATION-LOG-FILEPATH assoc installer-id
+                                                   {:installed-at (time/timestamp-string)})))
+       ; ...
+       (catch Exception e (installation-error-catched installer-id e))))
 
-(defn- install-packages!
+(defn- apply-installers!
   ; @ignore
-  ;
-  ; @param (map) packages
   []
   ; ...
-  (println "module-installer installing packages ...")
-  ; Initializing the install handler (creating the installation log file and adding it to .gitignore)
-  (reset!              state/INSTALLATION-STATE {:installed-package-count 0})
-  (io/create-file!     config/INSTALLED-PACKAGES-FILEPATH)
-  (git-handler/ignore! config/INSTALLED-PACKAGES-FILEPATH  {:group "module-installer"})
+  (println "module-installer applying installers ...")
+  ; Initializing the module installer:
+  ; - reseting the installation state
+  ; - updating the .gitignore file
+  (reset!              state/INSTALLATION-STATE            {:applied-installer-count 0})
+  (git-handler/ignore! config/INSTALLATION-LOG-FILEPATH    {:group "module-installer"})
   (git-handler/ignore! config/INSTALLATION-ERRORS-FILEPATH {:group "module-installer"})
   ; Reading the installation log file.
-  (let [installed-packages (io/read-edn-file config/INSTALLED-PACKAGES-FILEPATH {:warn? false})]
-       (letfn [(f [package-id]
-                  ; If the package is already installed, but the result stored as false,
-                  ; reinstalling it
-                  (when-let [reinstall? (-> installed-packages package-id :result false?)]
-                            (println "module-installer reinstalling:" package-id "...")
-                            (install-package! package-id))
-                  ; If the package is not installed yet, installing it
-                  (when-let [install? (-> installed-packages package-id :result nil?)]
-                            (println "module-installer installing:" package-id "...")
-                            (install-package! package-id)))]
+  (let [applied-installers (io/read-edn-file config/INSTALLATION-LOG-FILEPATH {:warn? false})]
+       (letfn [(f [installer-id installer-props]
+                  ; If the installer is not applied yet, installing it
+                  (when-let [install? (-> applied-installers installer-id :installed-at nil?)]
+                            (println "module-installer applying installer:" installer-id "...")
+                            (apply-installer! installer-id installer-props)))]
               ; Iterating over the registered installer functions ...
-              (let [installation-order (-> @state/INSTALLERS map/get-keys (vector/sort-items-by :priority))]
-                   (doseq [package-id installation-order]
-                          (f package-id)))
+              (let [ordered-installers (vector/sort-items-by @state/INSTALLERS > #(-> % second :priority))]
+                   (doseq [[installer-id installer-props] ordered-installers]
+                          (f installer-id installer-props)))
               ; ...
-              (let [installed-package-count (get @state/INSTALLATION-STATE :installed-package-count)]
-                   (println "module-installer successfully installed:" installed-package-count "packages")
-                   (println "module-installer exiting server ...")
+              (let [applied-installer-count (get @state/INSTALLATION-STATE :applied-installer-count)]
+                   (println "module-installer successfully applied:" applied-installer-count "installer(s)")
+                   (println "module-installer exiting ...")
                    (System/exit 0)))))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
 (defn check-installation!
+  ; @description
+  ; Checks whether all registered installers are successfully applied.
+  ; If not, it applies the ones that are not successfully installed, then exits.
+  ;
   ; @usage
   ; (check-installation!)
   []
   (if (env/require-installation?)
-      (install-packages!)
+      (apply-installers!)
       (print-installation-state!)))

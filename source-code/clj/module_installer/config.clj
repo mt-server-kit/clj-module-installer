@@ -7,9 +7,9 @@
 ; @ignore
 ;
 ; @constant (string)
-(def INSTALLATION-ERRORS-FILEPATH "environment/module-installation-errors.log")
+(def INSTALLATION-ERRORS-FILEPATH "environment/module-installer/installation-errors.log")
 
 ; @ignore
 ;
 ; @constant (string)
-(def INSTALLED-PACKAGES-FILEPATH "environment/installed-modules.edn")
+(def INSTALLATION-LOG-FILEPATH "environment/module-installer/installation-log.edn")

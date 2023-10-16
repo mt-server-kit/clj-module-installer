@@ -7,13 +7,19 @@
 
 - [check-installation!](#check-installation)
 
-- [package-installed?](#package-installed)
+- [installer-applied?](#installer-applied)
 
 - [reg-installer!](#reg-installer)
 
 - [require-installation?](#require-installation)
 
 ### check-installation!
+
+```
+@description
+Checks whether all registered installers are successfully applied.
+If not, it applies the ones that are not successfully installed, then exits.
+```
 
 ```
 @usage
@@ -27,7 +33,7 @@
 (defn check-installation!
   []
   (if (env/require-installation?)
-      (install-packages!)
+      (apply-installers!)
       (print-installation-state!)))
 ```
 
@@ -47,15 +53,15 @@
 
 ---
 
-### package-installed?
+### installer-applied?
 
 ```
-@param (keyword) package-id
+@param (keyword) installer-id
 ```
 
 ```
 @usage
-(package-installed? :my-package)
+(installer-applied? :my-installer)
 ```
 
 ```
@@ -66,10 +72,10 @@
 <summary>Source code</summary>
 
 ```
-(defn package-installed?
-  [package-id]
-  (let [installed-packages (io/read-edn-file config/INSTALLED-PACKAGES-FILEPATH {:warn? false})]
-       (get-in installed-packages [package-id :result])))
+(defn installer-applied?
+  [installer-id]
+  (let [applied-installers (io/read-edn-file config/INSTALLATION-LOG-FILEPATH {:warn? false})]
+       (get-in applied-installers [installer-id :installed-at])))
 ```
 
 </details>
@@ -78,10 +84,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [module-installer.api :refer [package-installed?]]))
+(ns my-namespace (:require [module-installer.api :refer [installer-applied?]]))
 
-(module-installer.api/package-installed? ...)
-(package-installed?                      ...)
+(module-installer.api/installer-applied? ...)
+(installer-applied?                      ...)
 ```
 
 </details>
@@ -92,22 +98,23 @@
 
 ```
 @description
-Registers a module installer function that will be applied when the
-'check-installation!' function next called and only if it doesn't successfully
-installed yet.
-The :installer-f function's return value will be passed to the :test-f function,
-and the :test-f function's return value will be evaluted as a boolean.
-If false the installation will be declared as an installation failure,
-and the package will be reinstalled when the 'check-installation!' next called.
-If you don't pass the :test-f function, the :installer-f function's return
-value will be evaluted as a boolean.
-By passing the {:priority ...} property, you can control the package installation
-order. As higher is the priority value, the installer function will be applied as sooner.
+Registers an installer function that will be applied when the 'check-installation!'
+function next called and only if it hasn't successfully installed yet.
+When the 'check-installation!' function applies the registered installers, ...
+1. ... it applies the ':installer-f' function ...
+2. ... it applies the ':test-f' function with the ':installer-f' function's return value
+       as its only argument ...
+3. ... it evaluates the ':test-f' function's return value as boolean ...
+4. ... if TRUE, it declares the installation as successful, otherwise it
+       will try to apply the installer again when the 'check-installation!' function
+       next called.
+You can control the installation order by passing the {:priority ...} property.
+As higher is the priority value, the installer function will be applied as sooner.
 ```
 
 ```
-@param (keyword) package-id
-@param (map) package-props
+@param (keyword) installer-id
+@param (map) installer-props
 {:installer-f (function)
  :priority (integer)(opt)
   Default: 0
@@ -117,13 +124,13 @@ order. As higher is the priority value, the installer function will be applied a
 
 ```
 @usage
-(reg-installer! :my-package {...})
+(reg-installer! :my-installer {...})
 ```
 
 ```
 @usage
-(defn my-package-f [] ...)
-(reg-installer! :my-package {:installer-f my-package-f})
+(defn my-installer-f [] ...)
+(reg-installer! :my-installer {:installer-f my-installer-f})
 ```
 
 <details>
@@ -131,11 +138,11 @@ order. As higher is the priority value, the installer function will be applied a
 
 ```
 (defn reg-installer!
-  [package-id {:keys [preinstaller?] :as package-props}]
-  (and (v/valid? package-id    {:test* {:f* keyword? :e* "package-id must be a keyword!"}})
-       (v/valid? package-props {:pattern* patterns/PACKAGE-PROPS-PATTERN :prefix* "package-props"})
-       (let [package-props (prototypes/package-props-prototype package-props)]
-            (swap! state/INSTALLERS assoc package-id package-props))))
+  [installer-id installer-props]
+  (and (v/valid? installer-id    {:test* {:f* keyword? :e* "installer-id must be a keyword!"}})
+       (v/valid? installer-props {:pattern* patterns/INSTALLER-PROPS-PATTERN :prefix* "installer-props"})
+       (let [installer-props (prototypes/installer-props-prototype installer-props)]
+            (swap! state/INSTALLERS vector/conj-item [installer-id installer-props]))))
 ```
 
 </details>
@@ -171,7 +178,7 @@ order. As higher is the priority value, the installer function will be applied a
 ```
 (defn require-installation?
   []
-  (letfn [(f [[package-id _]] (package-installed? package-id))]
+  (letfn [(f [[installer-id _]] (installer-applied? installer-id))]
          (not-every? f @state/INSTALLERS)))
 ```
 

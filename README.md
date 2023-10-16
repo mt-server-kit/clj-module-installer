@@ -3,8 +3,9 @@
 
 ### Overview
 
-The <strong>clj-module-installer</strong> is a simple in-project package handler
-that you can use to manage your modules' initializations in Clojure projects.
+The <strong>clj-module-installer</strong> is a simple Clojure in-project module installation
+manager. It provides functions for registering module side-effect functions (installers)
+and for checking module installation status.
 
 ### deps.edn
 
@@ -29,17 +30,17 @@ You can track the changes of the <strong>clj-module-installer</strong> library [
 
 ### Index
 
-- [How to register a package installer?](#how-to-register-a-package-installer)
+- [How to register an installer function?](#how-to-register-an-installer-function)
 
-- [How to run the registered installers?](#how-to-run-the-registered-installers)
+- [How to apply the registered installers?](#how-to-apply-the-registered-installers)
 
 - [Examples](#examples)
 
-### How to register a package installer?
+### How to register an installer function?
 
 The [`module-installer.api/reg-installer!`](documentation/clj/module-installer/API.md#reg-installer)
-function registers a function that will be applied when the `check-installation!`
-function called.
+function registers an installer function that will be applied when the `check-installation!`
+function next called and only if it hasn't successfully installed yet.
 
 ```
 (defn my-installer-f [] (println "Installing ..."))
@@ -50,21 +51,33 @@ By specifying the `:priority` property, you can control the installation order.
 As higher is the `:priority` value, the installer function will be applied as sooner.
 
 ```
-(defn my-installer-f [] (println "Installing ..."))
-(reg-installer! ::my-installer {:installer-f my-installer-f :priority 1})
+(defn my-installer-a-f [] (println "Installing A ..."))
+(defn my-installer-b-f [] (println "Installing B ..."))
+(defn my-installer-c-f [] (println "Installing C ..."))
+
+(reg-installer! ::my-installer-b {:installer-f my-installer-b-f :priority 2})
+(reg-installer! ::my-installer-a {:installer-f my-installer-a-f :priority 3})
+(reg-installer! ::my-installer-c {:installer-f my-installer-c-f :priority 1})
+
+; "Installing A ..."
+; "Installing B ..."
+; "Installing C ..."
 ```
 
-The `:installer-f` function's return value will be passed to the `:test-f` function,
-and the `:test-f` function's return value will be evaluated as a boolean.
-If false the installation will be declared as an installation failure,
-and the package will be reinstalled when the 'check-installation!' function next called.
+When the `check-installation!` function applies the registered installers, ...
+1. ... it applies the ':installer-f' function ...
+2. ... it applies the ':test-f' function with the ':installer-f' function's return value
+       as its only argument ...
+3. ... it evaluates the ':test-f' function's return value as boolean ...
+4. ... if TRUE, it declares the installation as successful, otherwise it
+       will try to apply the installer again when the 'check-installation!' function
+       next called.
 
-### How to run the registered installers?
+### How to apply the registered installers?
 
 The [`module-installer.api/check-installation!`](documentation/clj/module-installer/API.md#check-installation)
-function checks whether all the registered installers are successfully installed.
-If not, it runs the registered but not (successfully) installed functions, then exits
-the server.
+function checks whether all registered installers are successfully applied.
+If not, it applies the ones that are not successfully installed, then exits.
 
 ```
 (check-installation!)
@@ -77,7 +90,7 @@ own installer functions and a boot loader which calls the `check-installer!`
 function.
 
 In the first namespace we register an installer function in order to do some
-necessary stuff before the module get used.
+necessary side-effect before the module get used.
 
 ```
 (ns my-namespace-a
@@ -103,18 +116,18 @@ In the second namespace we register one another installer.
 (module-installer/reg-installer! ::my-installer {:installer-f my-installer-f})  
 ```
 
-In the server boot loader we place the `check-installation!` function to run
-the registered installers before the server starts.
+In the server boot loader we place the `check-installation!` function to run the registered
+installers before the HTTP server starts.
 
 > It might be the best time to call the `check-installation!` function is when the
   server already connected to the database and the installers can reach the db.
 
 When we first call the `run-server!` function it connects to the database,
 calls the `check-installation!` function which calls the previously registered
-installer functions then it exits the server.
+installer functions, then it exits the server.
 When we next call the `run-server!` function it connects to the database,
 calls the `check-installation!` function which does nothing because the installer
-functions are already called and then the HTTP server starts.
+functions are already applied, then the HTTP server starts.
 
 ```
 (ns my-boot-loader

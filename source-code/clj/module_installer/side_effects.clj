@@ -128,7 +128,7 @@
             ; ...
             (if-not test-result (installation-failed installer-id installer-f-output test-f-output))
             ; ...
-            (when   test-result (println "module-installer applied installer:" installer-id)
+            (when   test-result (println "module-installer successfully applied installer:" installer-id)
                                 (swap! state/INSTALLATION-STATE update :applied-installer-count inc)
                                 (io/swap-edn-file! config/INSTALLATION-LOG-FILEPATH assoc installer-id
                                                    {:installed-at (time/timestamp-string)})))

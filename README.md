@@ -40,11 +40,12 @@ You can track the changes of the <strong>clj-module-installer</strong> library [
 
 The [`module-installer.api/reg-installer!`](documentation/clj/module-installer/API.md#reg-installer)
 function registers an installer function that will be applied when the `check-installation!`
-function next called and only if it hasn't successfully installed yet.
+function next called for the module with the given module ID and only if it hasn't successfully
+installed yet.
 
 ```
 (defn my-installer-f [] (println "Installing ..."))
-(reg-installer! ::my-installer {:installer-f my-installer-f})
+(reg-installer! :my-module {:installer-f my-installer-f})
 ```
 
 By specifying the `:priority` property, you can control the installation order.
@@ -55,9 +56,9 @@ As higher is the `:priority` value, the installer function will be applied as so
 (defn my-installer-b-f [] (println "Installing B ..."))
 (defn my-installer-c-f [] (println "Installing C ..."))
 
-(reg-installer! ::my-installer-b {:installer-f my-installer-b-f :priority 2})
-(reg-installer! ::my-installer-a {:installer-f my-installer-a-f :priority 3})
-(reg-installer! ::my-installer-c {:installer-f my-installer-c-f :priority 1})
+(reg-installer! :my-module {:installer-f my-installer-b-f :priority 2})
+(reg-installer! :my-module {:installer-f my-installer-a-f :priority 3})
+(reg-installer! :my-module {:installer-f my-installer-c-f :priority 1})
 
 ; "Installing A ..."
 ; "Installing B ..."
@@ -76,11 +77,12 @@ When the `check-installation!` function applies the registered installers, ...
 ### How to apply the registered installers?
 
 The [`module-installer.api/check-installation!`](documentation/clj/module-installer/API.md#check-installation)
-function checks whether all registered installers are successfully applied.
+function checks whether all registered installers are successfully applied for
+the module with the given ID.
 If not, it applies the ones that are not successfully installed, then exits.
 
 ```
-(check-installation!)
+(check-installation! :my-module)
 ```
 
 ### Examples
@@ -100,7 +102,7 @@ necessary side-effect before the module get used.
   ; Create files, set default settings, etc.
   "Now, I'm installed!")    
 
-(module-installer/reg-installer! ::my-installer {:installer-f my-installer-f})  
+(module-installer/reg-installer! :my-module {:installer-f my-installer-f})  
 ```
 
 In the second namespace we register one another installer.
@@ -113,7 +115,7 @@ In the second namespace we register one another installer.
   ; Create files, set default settings, etc.
   "Now, I'm installed too!")    
 
-(module-installer/reg-installer! ::my-installer {:installer-f my-installer-f})  
+(module-installer/reg-installer! :my-module {:installer-f my-installer-f})  
 ```
 
 In the server boot loader we place the `check-installation!` function to run the registered
@@ -136,7 +138,7 @@ functions are already applied, then the HTTP server starts.
 (defn run-server!
   []
   (connect-to-database!)
-  (module-installer/check-installation!)
+  (module-installer/check-installation! :my-module)
   (start-http-server!)
   ...)    
 ```

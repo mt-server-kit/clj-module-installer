@@ -6,12 +6,12 @@
 
 ; @ignore
 ;
-; @atom (vectors in vector)
-; [[(keyword) installer-id
-;   (map) installer-props]]
-(def INSTALLERS (atom []))
+; @atom (map)
+; {:my-module [{:installer-name "..."}]}
+(def INSTALLERS (atom {}))
 
 ; @ignore
 ;
 ; @atom (map)
+; {:my-module (map)}
 (def INSTALLATION-STATE (atom {}))

@@ -1,6 +1,7 @@
 
 (ns module-installer.prototypes
-    (:require [noop.api :refer [param]]))
+    (:require [module-installer.utils :as utils]
+              [noop.api               :refer [param]]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -9,11 +10,14 @@
   ; @ignore
   ;
   ; @param (map) installer-props
+  ; {:installer-f (function)}
   ;
   ; @return (map)
-  ; {:priority (integer)
+  ; {:installer-name (string)
+  ;  :priority (integer)
   ;  :test-f (function)}
-  [installer-props]
+  [{:keys [installer-f] :as installer-props}]
   (merge {:priority 0
-          :test-f boolean}
-         (param installer-props)))
+          :test-f   boolean}
+         (param installer-props)
+         {:installer-name (utils/installer-f->installer-name installer-f)}))

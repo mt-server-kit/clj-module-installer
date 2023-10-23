@@ -1,7 +1,6 @@
 
 (ns module-installer.prototypes
-    (:require [module-installer.utils :as utils]
-              [noop.api               :refer [param]]))
+    (:require [module-installer.utils :as utils]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -19,5 +18,5 @@
   [{:keys [installer-f] :as installer-props}]
   (merge {:priority 0
           :test-f   boolean}
-         (param installer-props)
+         (-> installer-props)
          {:installer-name (utils/installer-f->installer-name installer-f)}))

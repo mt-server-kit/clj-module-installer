@@ -1,5 +1,9 @@
 
-# module-installer.api Clojure namespace
+### module-installer.api
+
+Functional documentation of the module-installer.api Clojure namespace
+
+---
 
 ##### [README](../../../README.md) > [DOCUMENTATION](../../COVER.md) > module-installer.api
 
@@ -8,6 +12,8 @@
 - [check-installation!](#check-installation)
 
 - [reg-installer!](#reg-installer)
+
+---
 
 ### check-installation!
 
@@ -124,5 +130,5 @@ As higher is the priority value, the installer function will be applied as soone
 
 ---
 
-This documentation is generated with the [clj-docs-generator](https://github.com/bithandshake/clj-docs-generator) engine.
+<sub>This documentation is generated with the [clj-docs-generator](https://github.com/bithandshake/clj-docs-generator) engine.</sub>
 

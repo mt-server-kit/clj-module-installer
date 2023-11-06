@@ -1,7 +1,11 @@
 
-# clj-module-installer documentation
+### clj-module-installer
 
-Documentation of the [clj-module-installer](https://github.com/bithandshake/clj-module-installer) Clojure library
+Functional documentation of the [clj-module-installer](https://github.com/bithandshake/clj-module-installer) Clojure library
+
+---
+
+
 
 ##### [README](../README.md) > DOCUMENTATION
 
@@ -11,5 +15,5 @@ Documentation of the [clj-module-installer](https://github.com/bithandshake/clj-
 
 ---
 
-This documentation is generated with the [clj-docs-generator](https://github.com/bithandshake/clj-docs-generator) engine.
+<sub>This documentation is generated with the [clj-docs-generator](https://github.com/bithandshake/clj-docs-generator) engine.</sub>
 

@@ -28,6 +28,9 @@ You can track the changes of the <strong>clj-module-installer</strong> library [
 
 # Usage
 
+> Some parameters of the following functions and some further functions are not discussed in this file.
+  To learn more about the available functionality, check out the [functional documentation](documentation/COVER.md)!
+
 ### Index
 
 - [How to register an installer function?](#how-to-register-an-installer-function)

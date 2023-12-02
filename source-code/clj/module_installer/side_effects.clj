@@ -1,7 +1,7 @@
 
 (ns module-installer.side-effects
-    (:require [io.api                      :as io]
-              [edn-log.api                 :as edn-log]
+    (:require [edn-log.api                 :as edn-log]
+              [io.api                      :as io]
               [module-installer.config     :as config]
               [module-installer.env        :as env]
               [module-installer.patterns   :as patterns]

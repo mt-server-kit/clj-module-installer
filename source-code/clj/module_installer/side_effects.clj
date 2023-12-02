@@ -131,9 +131,9 @@
             ; ...
             (when   test-result (println "module-installer successfully applied installer:" installer-name)
                                 (swap! state/INSTALLATION-STATE update-in [module-id :applied-installer-count] inc)
-                                (io/swap-edn-file! config/INSTALLATION-LOG-FILEPATH assoc-in
-                                                   [module-id installer-name]
-                                                   {:installed-at (time/timestamp-string)})))
+                                (io/update-edn-file! config/INSTALLATION-LOG-FILEPATH assoc-in
+                                                     [module-id installer-name]
+                                                     {:installed-at (time/timestamp-string)})))
        ; ...
        (catch Exception e (installation-error-catched module-id installer-props e))))
 

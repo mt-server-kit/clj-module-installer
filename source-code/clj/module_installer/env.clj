@@ -18,6 +18,6 @@
   ; @return (boolean)
   [module-id]
   (let [applied-installers (io/read-edn-file config/INSTALLATION-LOG-FILEPATH {:warn? false})]
-       (letfn [(f [{:keys [installer-name]}]
-                  (get-in applied-installers [module-id installer-name :installed-at]))]
-              (not-every? f (module-id @state/INSTALLERS)))))
+       (letfn [(f0 [{:keys [installer-name]}]
+                   (get-in applied-installers [module-id installer-name :installed-at]))]
+              (not-every? f0 (module-id @state/INSTALLERS)))))

@@ -36,8 +36,7 @@
   ; @param (map) installer-props
   ; {:installer-f (function)
   ;   Do not use anonymous function as installer function!
-  ;   (Installers are identified and differentiated by their names, it has to be constant
-  ;    over different compiles!)
+  ;   (Installers are identified and differentiated by their names, it must be constant!)
   ;  :priority (integer)(opt)
   ;   Default: 0
   ;  :test-f (function)(opt)
@@ -148,16 +147,16 @@
   (swap! state/INSTALLATION-STATE assoc module-id {:applied-installer-count 0})
   ; Reading the installation log file.
   (let [applied-installers (io/read-edn-file config/INSTALLATION-LOG-FILEPATH {:warn? false})]
-       (letfn [(f [module-id {:keys [installer-name] :as installer-props}]
-                  ; If the installer is not applied yet, installing it ...
-                  (let [installed-at (get-in applied-installers [module-id installer-name :installed-at])]
-                       (when-not installed-at (println "module-installer applying installer:" installer-name "...")
-                                              (apply-installer! module-id installer-props))))]
+       (letfn [(f0 [module-id {:keys [installer-name] :as installer-props}]
+                   ; If the installer is not applied yet, installing it ...
+                   (let [installed-at (get-in applied-installers [module-id installer-name :installed-at])]
+                        (when-not installed-at (println "module-installer applying installer:" installer-name "...")
+                                               (apply-installer! module-id installer-props))))]
               ; Iterating over the registered installer functions ...
               (let [module-installers  (get @state/INSTALLERS module-id)
                     ordered-installers (vector/sort-items-by module-installers > :priority)]
                    (doseq [installer-props ordered-installers]
-                          (f module-id installer-props)))
+                          (f0 module-id installer-props)))
               ; ...
               (let [applied-installer-count (get-in @state/INSTALLATION-STATE [module-id :applied-installer-count])]
                    (println "module-installer successfully applied:" applied-installer-count "installer(s) for module:" module-id)

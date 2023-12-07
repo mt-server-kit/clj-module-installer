@@ -1,6 +1,7 @@
 
 (ns module-installer.side-effects
     (:require [edn-log.api                 :as edn-log]
+              [fruits.vector.api           :as vector]
               [io.api                      :as io]
               [module-installer.config     :as config]
               [module-installer.env        :as env]
@@ -8,8 +9,7 @@
               [module-installer.prototypes :as prototypes]
               [module-installer.state      :as state]
               [time.api                    :as time]
-              [validator.api               :as v]
-              [vector.api                  :as vector]))
+              [validator.api               :as v]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------

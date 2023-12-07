@@ -5,6 +5,6 @@
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
-; module-installer.side-effects
+; @redirect (module-installer.side-effects)
 (def reg-installer!      side-effects/reg-installer!)
 (def check-installation! side-effects/check-installation!)

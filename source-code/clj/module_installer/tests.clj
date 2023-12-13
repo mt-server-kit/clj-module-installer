@@ -1,5 +1,5 @@
 
-(ns module-installer.patterns)
+(ns module-installer.tests)
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -10,7 +10,16 @@
 ; https://github.com/bithandshake/cljc-validator
 ;
 ; @constant (map)
-(def INSTALLER-PROPS-PATTERN
+(def MODULE-ID-TEST
+     {:f* keyword? :e* "must be a keyword!"})
+
+; @ignore
+;
+; @description
+; https://github.com/bithandshake/cljc-validator
+;
+; @constant (map)
+(def INSTALLER-PROPS-TEST
      {:installer-f {:f*   fn?
                     :e*   ":installer-f must be a function!"}
       :priority    {:opt* true

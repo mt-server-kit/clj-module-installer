@@ -5,7 +5,7 @@
               [io.api                      :as io]
               [module-installer.config     :as config]
               [module-installer.env        :as env]
-              [module-installer.patterns   :as patterns]
+              [module-installer.tests :as tests]
               [module-installer.prototypes :as prototypes]
               [module-installer.state      :as state]
               [time.api                    :as time]
@@ -49,8 +49,8 @@
   ; (defn my-installer-f [] ...)
   ; (reg-installer! :my-module {:installer-f my-installer-f})
   [module-id installer-props]
-  (and (v/valid? module-id       {:test* {:f* keyword? :e* "module-id must be a keyword!"}})
-       (v/valid? installer-props {:pattern* patterns/INSTALLER-PROPS-PATTERN :prefix* "installer-props"})
+  (and (v/valid? module-id       tests/MODULE-ID-TEST       {:prefix "module-id"})
+       (v/valid? installer-props tests/INSTALLER-PROPS-TEST {:prefix "installer-props"})
        (let [installer-props (prototypes/installer-props-prototype installer-props)]
             (swap! state/INSTALLERS update module-id vector/conj-item installer-props))))
 

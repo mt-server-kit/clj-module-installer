@@ -5,9 +5,9 @@
               [io.api                      :as io]
               [module-installer.config     :as config]
               [module-installer.env        :as env]
-              [module-installer.tests :as tests]
               [module-installer.prototypes :as prototypes]
               [module-installer.state      :as state]
+              [module-installer.tests      :as tests]
               [time.api                    :as time]
               [validator.api               :as v]))
 

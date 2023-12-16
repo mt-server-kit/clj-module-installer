@@ -20,7 +20,7 @@ Check out the latest commit on the [release branch](https://github.com/bithandsh
 
 ### Documentation
 
-The <strong>clj-module-installer</strong> functional documentation is [available here](documentation/COVER.md).
+The <strong>clj-module-installer</strong> functional documentation is [available here](https://bithandshake.github.io/clj-module-installer).
 
 ### Changelog
 

@@ -11,7 +11,7 @@ functions (installers) and for checking module installation status.
 
 ```
 {:deps {bithandshake/clj-module-installer {:git/url "https://github.com/bithandshake/clj-module-installer"
-                                           :sha     "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"}}
+                                           :sha     "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"}}}
 ```
 
 ### Current version

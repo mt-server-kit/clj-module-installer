@@ -168,9 +168,8 @@
 
 (defn check-installation!
   ; @description
-  ; Checks whether all registered installers are successfully applied for the module
-  ; with the given ID.
-  ; If not, it applies the ones that are not successfully installed, then exits.
+  ; Checks whether all registered installers (of the module with the given ID) are successfully applied.
+  ; If not, it applies the installers of the module that are not successfully installed, then exits.
   ;
   ; @param (keyword) module-id
   ;

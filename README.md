@@ -4,8 +4,8 @@
 ### Overview
 
 The <strong>clj-module-installer</strong> is a simple in-project module installation
-manager for Clojure projects. It provides functions for registering module side-effect
-functions (installers) and for checking module installation status.
+manager for Clojure projects. It provides functions for registering module installer
+functions and functions for checking module installation status.
 
 ### deps.edn
 

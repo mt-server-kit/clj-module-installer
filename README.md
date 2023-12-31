@@ -73,9 +73,9 @@ When the `check-installation!` function applies the registered installers, ...
 2. ... it applies the ':test-f' function with the ':installer-f' function's return value
        as its only argument ...
 3. ... it evaluates the ':test-f' function's return value as boolean ...
-4. ... if TRUE, it declares the installation as successful, otherwise it
-       will try to apply the installer again when the 'check-installation!' function
-       next called.
+4. ... if TRUE, it declares the installation as successful.
+       Otherwise, it will try to apply the installer again when the 'check-installation!'
+       function is called the next time.
 
 ### How to apply the registered installers?
 

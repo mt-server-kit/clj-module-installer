@@ -1,13 +1,13 @@
 
 {:paths ["source-code/clj"]
  :deps  {bithandshake/clj-edn-log    {:git/url "https://github.com/bithandshake/clj-edn-log"
-                                      :sha     "6b7165cf7f7c3aed60fc5a064f87019dd9c3fce9"}
+                                      :sha     "6fad3c7dad1bddbc9af6847f6b0b42c6a874ef13"}
          bithandshake/cljc-fruits    {:git/url "https://github.com/bithandshake/cljc-fruits"
-                                      :sha     "6b7165cf7f7c3aed60fc5a064f87019dd9c3fce9"}
+                                      :sha     "6fad3c7dad1bddbc9af6847f6b0b42c6a874ef13"}
          bithandshake/cljc-io        {:git/url "https://github.com/bithandshake/cljc-io"
-                                      :sha     "769a557e323abbcf7c01cfd5acb8b637c172e5d6"}
+                                      :sha     "3c31a8cb5a32d904ecdefc1a23858921ed9acebd"}
          bithandshake/cljc-time      {:git/url "https://github.com/bithandshake/cljc-time"
-                                      :sha     "4dfe9f9d959313dbc22242c35e5a8525445b9609"}
+                                      :sha     "58aee623e1cc20a464638b308f1492aa7ac3cce5"}
          bithandshake/cljc-validator {:git/url "https://github.com/bithandshake/cljc-validator"
-                                      :sha     "6b7165cf7f7c3aed60fc5a064f87019dd9c3fce9"}
+                                      :sha     "6fad3c7dad1bddbc9af6847f6b0b42c6a874ef13"}
          org.clojure/clojure         {:mvn/version "1.10.1"}}}

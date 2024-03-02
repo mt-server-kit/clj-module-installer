@@ -12,9 +12,7 @@
   ;
   ; @return (string)
   [n]
-  ; The module installer uses the installer-f function's name as installer name
-  ; to differentiate installer functions with the same module ID.
-  ;
+  ; The module installer uses the 'installer-f' function's name as installer name to differentiate installer functions with the same module ID.
   ; In stringized function names the part after the '@' character is not constant.
   (-> n (str)
         (string/replace-part          "$" "/" {:recur?  true})

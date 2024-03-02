@@ -1,6 +1,6 @@
 
 (ns module-installer.side-effects
-    (:require [edn-log.api                 :as edn-log]
+    (:require [system-log.api :as system-log]
               [fruits.vector.api           :as vector]
               [io.api                      :as io]
               [module-installer.config     :as config]
@@ -69,11 +69,12 @@
   ; @usage
   ; (installation-failed :my-module {:installer-name "my-namespace$my-installer-f@63c66980"} "..." "...")
   [module-id {:keys [installer-name]} installer-f-output test-f-output]
-  (edn-log/write! config/INSTALLATION-ERRORS-FILEPATH (str "\nmodule-id:"          module-id
-                                                           "\ninstaller-name:"     installer-name
-                                                           "\ninstaller-f-output:" installer-f-output
-                                                           "\ntest-f-output:"      test-f-output
-                                                           "\n"))
+  (system-log/prepend-entry! (str "\nmodule-id:"          module-id
+                                  "\ninstaller-name:"     installer-name
+                                  "\ninstaller-f-output:" installer-f-output
+                                  "\ntest-f-output:"      test-f-output
+                                  "\n")
+                             {:filepath config/INSTALLATION-ERRORS-FILEPATH})
   ; ***
   (println "module-installer failed to apply an installer!")
   (println "\nmodule-id:"          module-id)
@@ -94,10 +95,11 @@
   ; @usage
   ; (installation-error-catched :my-module {:installer-name "my-namespace$my-installer-f@63c66980"} "...")
   [module-id {:keys [installer-name]} error-message]
-  (edn-log/write! config/INSTALLATION-ERRORS-FILEPATH (str "\nmodule-id:"      module-id
-                                                           "\ninstaller-name:" installer-name
-                                                           "\nerror-message:"  error-message
-                                                           "\n"))
+  (system-log/prepend-entry! (str "\nmodule-id:"      module-id
+                                  "\ninstaller-name:" installer-name
+                                  "\nerror-message:"  error-message
+                                  "\n")
+                             {:filepath config/INSTALLATION-ERRORS-FILEPATH})
   ; ***
   (println "module-installer catched an error while applying an installer!")
   (println "\nmodule-id:"      module-id)

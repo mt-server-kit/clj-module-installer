@@ -1,13 +1,13 @@
 
 (ns module-installer.side-effects
-    (:require [system-log.api :as system-log]
-              [fruits.vector.api           :as vector]
+    (:require [fruits.vector.api           :as vector]
               [io.api                      :as io]
               [module-installer.config     :as config]
               [module-installer.env        :as env]
               [module-installer.prototypes :as prototypes]
               [module-installer.state      :as state]
               [module-installer.tests      :as tests]
+              [system-log.api              :as system-log]
               [time.api                    :as time]
               [validator.api               :as v]))
 

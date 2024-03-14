@@ -17,7 +17,7 @@
 (defn reg-installer!
   ; @description
   ; Registers an installer function that will be applied when the 'check-installation!'
-  ; function next called for the module with the given module ID and only if it hasn't
+  ; function next called for the module with the given module ID and only if it has not
   ; successfully installed yet.
   ;
   ; When the 'check-installation!' function applies the registered installers, ...

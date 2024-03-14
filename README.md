@@ -18,13 +18,13 @@ functions and functions for checking module installation status.
 
 Check out the latest commit on the [release branch](https://github.com/bithandshake/clj-module-installer/tree/release).
 
-### Documentation
-
-The <strong>clj-module-installer</strong> functional documentation is [available here](https://bithandshake.github.io/clj-module-installer).
-
 ### Changelog
 
 You can track the changes of the <strong>clj-module-installer</strong> library [here](CHANGES.md).
+
+# Documentation
+
+The <strong>clj-module-installer</strong> functional documentation is [available here](https://bithandshake.github.io/clj-module-installer).
 
 # Usage
 
@@ -43,7 +43,7 @@ You can track the changes of the <strong>clj-module-installer</strong> library [
 
 The [`module-installer.api/reg-installer!`](documentation/clj/module-installer/API.md#reg-installer)
 function registers an installer function that will be applied when the `check-installation!`
-function next called for the module with the given module ID and only if it hasn't successfully
+function next called for the module with the given module ID and only if it has not successfully
 installed yet.
 
 ```

@@ -10,13 +10,13 @@ functions and functions for checking module installation status.
 ### deps.edn
 
 ```
-{:deps {bithandshake/clj-module-installer {:git/url "https://github.com/bithandshake/clj-module-installer"
-                                           :sha     "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"}}}
+{:deps {mt-server-kit/clj-module-installer {:git/url "https://github.com/mt-server-kit/clj-module-installer"
+                                            :sha     "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"}}}
 ```
 
 ### Current version
 
-Check out the latest commit on the [release branch](https://github.com/bithandshake/clj-module-installer/tree/release).
+Check out the latest commit on the [release branch](https://github.com/mt-server-kit/clj-module-installer/tree/release).
 
 ### Changelog
 
@@ -24,7 +24,7 @@ You can track the changes of the <strong>clj-module-installer</strong> library [
 
 # Documentation
 
-The <strong>clj-module-installer</strong> functional documentation is [available here](https://bithandshake.github.io/clj-module-installer).
+The <strong>clj-module-installer</strong> functional documentation is [available here](https://mt-server-kit.github.io/clj-module-installer).
 
 # Usage
 

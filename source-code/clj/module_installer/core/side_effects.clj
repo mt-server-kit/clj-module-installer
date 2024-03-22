@@ -21,15 +21,12 @@
   ; @param (keyword) module-id
   ; @param (map) installer-props
   ; {:installer-f (function)
-  ;   Do not use anonymous functions as installer function (installer functions are identified and differentiated by their names!)
+  ;   Do not use anonymous functions as installer function (installer functions are identified and differentiated by their names).
   ;  :priority (integer)(opt)
   ;   The higher the priority value, the sooner the installer function will be applied.
   ;   Default: 0
   ;  :test-f (function)(opt)
   ;   Default: boolean}
-  ;
-  ; @usage
-  ; (reg-installer! :my-module {...})
   ;
   ; @usage
   ; (defn my-installer-f [] ...)

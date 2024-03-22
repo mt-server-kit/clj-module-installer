@@ -1,7 +1,7 @@
 
 (ns module-installer.core.env
-    (:require [fruits.vector.api :as vector]
-              [common-state.api :as common-state]))
+    (:require [common-state.api  :as common-state]
+              [fruits.vector.api :as vector]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------

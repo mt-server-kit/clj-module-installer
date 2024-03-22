@@ -1,13 +1,13 @@
 
 (ns module-installer.core.side-effects
-    (:require [fruits.vector.api :as vector]
-              [module-installer.install.env :as install.env]
+    (:require [common-state.api                      :as common-state]
+              [fruits.vector.api                     :as vector]
+              [module-installer.core.env             :as core.env]
+              [module-installer.core.prototypes      :as core.prototypes]
+              [module-installer.core.tests           :as core.tests]
+              [module-installer.install.env          :as install.env]
               [module-installer.install.side-effects :as install.side-effects]
-              [module-installer.core.env :as core.env]
-              [module-installer.core.prototypes :as core.prototypes]
-              [common-state.api :as common-state]
-              [module-installer.core.tests :as core.tests]
-              [validator.api :as v]))
+              [validator.api                         :as v]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------

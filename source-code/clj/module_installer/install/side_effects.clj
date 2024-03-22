@@ -1,12 +1,12 @@
 
 (ns module-installer.install.side-effects
-    (:require [fruits.vector.api           :as vector]
-              [io.api                      :as io]
-              [module-installer.install.config :as install.config]
+    (:require [common-state.api                  :as common-state]
+              [fruits.vector.api                 :as vector]
+              [io.api                            :as io]
+              [module-installer.install.config   :as install.config]
               [module-installer.install.messages :as install.messages]
-              [system-log.api              :as system-log]
-              [time.api                    :as time]
-              [common-state.api :as common-state]))
+              [system-log.api                    :as system-log]
+              [time.api                          :as time]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------

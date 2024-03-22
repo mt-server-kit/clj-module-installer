@@ -1,8 +1,8 @@
 
 (ns module-installer.install.env
-    (:require [io.api :as io]
-              [module-installer.install.config :as install.config]
-              [common-state.api  :as common-state]))
+    (:require [common-state.api                :as common-state]
+              [io.api                          :as io]
+              [module-installer.install.config :as install.config]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------

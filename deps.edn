@@ -1,6 +1,8 @@
 
 {:paths ["source-code/clj"]
- :deps  {mt-server-kit/clj-system-log {:git/url "https://github.com/mt-server-kit/clj-system-log"
+ :deps  {mt-app-kit/cljc-common-state {:git/url "https://github.com/mt-app-kit/cljc-common-state"
+                                       :sha     "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"}
+         mt-server-kit/clj-system-log {:git/url "https://github.com/mt-server-kit/clj-system-log"
                                        :sha     "1fd24cafff58973e4f96fa2795b0a1b8c8aab8c6"}
          mt-utilities/cljc-fruits     {:git/url "https://github.com/mt-utilities/cljc-fruits"
                                        :sha     "1fd24cafff58973e4f96fa2795b0a1b8c8aab8c6"}

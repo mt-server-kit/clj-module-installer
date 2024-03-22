@@ -1,5 +1,5 @@
 
-(ns module-installer.config)
+(ns module-installer.install.messages)
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -7,9 +7,9 @@
 ; @ignore
 ;
 ; @constant (string)
-(def INSTALLATION-ERRORS-FILEPATH "environment/module-installer/installation-errors.log")
+(def INSTALLATION-FAILED-ERROR "Output of installer function indicates failed installation.")
 
 ; @ignore
 ;
 ; @constant (string)
-(def INSTALLATION-LOG-FILEPATH "environment/module-installer/installation-log.edn")
+(def INSTALLATION-ERROR-CATCHED "Error occured while applying an installer function.")

@@ -1,5 +1,5 @@
 
-(ns module-installer.utils
+(ns module-installer.core.utils
     (:require [fruits.string.api :as string]))
 
 ;; ----------------------------------------------------------------------------
@@ -10,10 +10,15 @@
   ;
   ; @param (function) n
   ;
+  ; @usage
+  ; (installer-f->installer-name my-namespace$my_installer_f@xx00000)
+  ; =>
+  ; "my-namespace$my_installer_f"
+  ;
   ; @return (string)
   [n]
-  ; The module installer uses the 'installer-f' function's name as installer name to differentiate installer functions with the same module ID.
-  ; In stringized function names the part after the '@' character is not constant.
+  ; Using the name of installer functions as installer names differentiate them within the same module.
+  ; In stringized function names the part after the '@' character is not constant!
   (-> n (str)
         (string/replace-part          "$" "/" {:recur?  true})
         (string/before-last-occurence "@"     {:return? true})))

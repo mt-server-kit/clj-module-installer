@@ -1,6 +1,6 @@
 
-(ns module-installer.prototypes
-    (:require [module-installer.utils :as utils]))
+(ns module-installer.core.prototypes
+    (:require [module-installer.core.utils :as core.utils]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -19,4 +19,4 @@
   (merge {:priority 0
           :test-f   boolean}
          (-> installer-props)
-         {:installer-name (utils/installer-f->installer-name installer-f)}))
+         {:installer-name (core.utils/installer-f->installer-name installer-f)}))

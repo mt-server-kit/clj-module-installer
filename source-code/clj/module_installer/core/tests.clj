@@ -7,7 +7,7 @@
 ; @ignore
 ;
 ; @links
-; [cljc-validator](mt-utilities.github.io/cljc-validator)
+; [cljc-validator](github.com/mt-utilities/cljc-validator)
 ;
 ; @constant (map)
 (def MODULE-ID-TEST
@@ -16,7 +16,7 @@
 ; @ignore
 ;
 ; @links
-; [cljc-validator](mt-utilities.github.io/cljc-validator)
+; [cljc-validator](github.com/mt-utilities/cljc-validator)
 ;
 ; @constant (map)
 (def INSTALLER-PROPS-TEST

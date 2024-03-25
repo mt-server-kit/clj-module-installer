@@ -36,8 +36,8 @@
   ;
   ; @return (maps in vector)
   [module-id installer-props]
-  (and (v/valid? module-id       core.tests/MODULE-ID-TEST       {:prefix "module-id"})
-       (v/valid? installer-props core.tests/INSTALLER-PROPS-TEST {:prefix "installer-props"})
+  (and (v/valid? module-id       [core.tests/MODULE-ID-TEST]       {:prefix "module-id"})
+       (v/valid? installer-props [core.tests/INSTALLER-PROPS-TEST] {:prefix "installer-props"})
        (let [installer-props (core.prototypes/installer-props-prototype installer-props)]
             (if-not (core.env/installer-function-registered? module-id installer-props)
                     (common-state/update-state! :module-installer :installers update module-id vector/conj-item installer-props))

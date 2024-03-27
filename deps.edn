@@ -1,15 +1,15 @@
 
 {:paths ["source-code/clj"]
  :deps  {mt-app-kit/cljc-common-state {:git/url "https://github.com/mt-app-kit/cljc-common-state"
-                                       :sha     "41379336fd91e512f42c52106aa7d9e873f77d31"}
+                                       :sha     "85e195270364c664590657c22e89b8cff2f6c99e"}
          mt-server-kit/clj-system-log {:git/url "https://github.com/mt-server-kit/clj-system-log"
-                                       :sha     "bf73e3064c1ac728b9686132d84b49b2c11acf28"}
+                                       :sha     "476e476c2a4614f5082f9de1e080eeb6cabe4c75"}
          bithandshake/cljc-fruits     {:git/url "https://github.com/bithandshake/cljc-fruits"
-                                       :sha     "289bfaa76c90632b4332e89a226eb657e7eb4107"}
+                                       :sha     "fcd4ebfed6cc44486464b5d619bef88d620c7f6a"}
          mt-utilities/cljc-io         {:git/url "https://github.com/mt-utilities/cljc-io"
-                                       :sha     "e915435d249325e009c3129d0028402683000c59"}
+                                       :sha     "69c0e421d606d131be3991efd8ce47d45034dd24"}
          mt-utilities/cljc-time       {:git/url "https://github.com/mt-utilities/cljc-time"
-                                       :sha     "880512f25278823fb72bb1fe96036be32573a83a"}
+                                       :sha     "798bb57c5d0d421618bcef7071d49580e16b61aa"}
          mt-utilities/cljc-validator  {:git/url "https://github.com/mt-utilities/cljc-validator"
-                                       :sha     "24be87b83e439922b986238ec62a310d004f3c1f"}
+                                       :sha     "daf263ea34298da9153b060689710d459f4cc1f8"}
          org.clojure/clojure          {:mvn/version "1.10.1"}}}

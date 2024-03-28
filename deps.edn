@@ -3,13 +3,13 @@
  :deps  {mt-app-kit/cljc-common-state {:git/url "https://github.com/mt-app-kit/cljc-common-state"
                                        :sha     "85e195270364c664590657c22e89b8cff2f6c99e"}
          mt-server-kit/clj-system-log {:git/url "https://github.com/mt-server-kit/clj-system-log"
-                                       :sha     "476e476c2a4614f5082f9de1e080eeb6cabe4c75"}
+                                       :sha     "10412f96d5c2f6c7b4d6303a4b5d25059e95a8d1"}
          bithandshake/cljc-fruits     {:git/url "https://github.com/bithandshake/cljc-fruits"
                                        :sha     "fcd4ebfed6cc44486464b5d619bef88d620c7f6a"}
          mt-utilities/cljc-io         {:git/url "https://github.com/mt-utilities/cljc-io"
                                        :sha     "69c0e421d606d131be3991efd8ce47d45034dd24"}
          mt-utilities/cljc-time       {:git/url "https://github.com/mt-utilities/cljc-time"
-                                       :sha     "798bb57c5d0d421618bcef7071d49580e16b61aa"}
+                                       :sha     "66a0d8c02a26d9cfe4b1bfbae1b30989d5595864"}
          mt-utilities/cljc-validator  {:git/url "https://github.com/mt-utilities/cljc-validator"
                                        :sha     "daf263ea34298da9153b060689710d459f4cc1f8"}
          org.clojure/clojure          {:mvn/version "1.10.1"}}}

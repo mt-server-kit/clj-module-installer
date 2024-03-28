@@ -1,7 +1,7 @@
 
 {:paths ["source-code/clj"]
  :deps  {mt-app-kit/cljc-common-state {:git/url "https://github.com/mt-app-kit/cljc-common-state"
-                                       :sha     "858d3a8306ffdd894355415928c113cee82535a1"}
+                                       :sha     "73c1d92ee628a63b93c78324a6762453ec699b16"}
          mt-server-kit/clj-system-log {:git/url "https://github.com/mt-server-kit/clj-system-log"
                                        :sha     "7e8c57c644a0cfe63bce49a1ddc55a4a9747c05b"}
          bithandshake/cljc-fruits     {:git/url "https://github.com/bithandshake/cljc-fruits"
@@ -11,5 +11,5 @@
          mt-utilities/cljc-time       {:git/url "https://github.com/mt-utilities/cljc-time"
                                        :sha     "cdf5466169d545057d4a4d3346ff9a1e72121feb"}
          mt-utilities/cljc-validator  {:git/url "https://github.com/mt-utilities/cljc-validator"
-                                       :sha     "684381c67f7f7d52e3f6959eb11b15e5be233204"}
+                                       :sha     "98d7ebc0c06deaf79fab4c813b1376e4c435788b"}
          org.clojure/clojure          {:mvn/version "1.10.1"}}}
